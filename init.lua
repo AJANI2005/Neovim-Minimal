@@ -1,5 +1,5 @@
 -- options
-vim.cmd("colorscheme zaibatsu")
+vim.cmd("colorscheme default")
 vim.g.mapleader = " "
 vim.g.maplocalleader = "\\"
 vim.opt.number = true
