@@ -49,7 +49,6 @@ vim.keymap.set("v", "K", ":m '<-2<CR>gv=gv", { desc = "Move selection up" })
 -- import modules in lua directory
 require("lsp")	   --language server protocol
 require("find")    --fuzzy finding and live grep
-require("netrw")   --netrw wrapper
 require("term")    --integrated terminal
 require("vscode")  --integration with vscode
 
