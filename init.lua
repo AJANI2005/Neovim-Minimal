@@ -52,4 +52,4 @@ require("lsp")	   --language server protocol
 require("find")    --fuzzy finding and live grep
 require("term")    --integrated terminal
 require("vscode")  --integration with vscode
-
+require("netrw")
