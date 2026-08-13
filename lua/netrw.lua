@@ -8,7 +8,7 @@ vim.g.netrw_keepdir = 1
 vim.keymap.set("n", "<leader>pv", "<cmd>Ex<CR>")
 
 
-local netrw_line
+local current_file
 
 vim.api.nvim_create_autocmd("WinLeave", {
     callback = function()
@@ -19,36 +19,20 @@ vim.api.nvim_create_autocmd("WinLeave", {
             return
         end
 
-        local row = vim.api.nvim_win_get_cursor(win)[1]
-        netrw_line = vim.api.nvim_buf_get_lines(buf, row - 1, row, false)[1]
+        current_file = vim.fn.expand("%:t")
     end,
 })
 
 vim.api.nvim_create_autocmd("WinEnter", {
     callback = function()
-        local win = vim.api.nvim_get_current_win()
-        local buf = vim.api.nvim_win_get_buf(win)
+        local buf = vim.api.nvim_win_get_buf(0)
 
-        if vim.bo[buf].filetype ~= "netrw" or not netrw_line then
+        if vim.bo[buf].filetype ~= "netrw" or not current_file then
             return
         end
 
         vim.schedule(function()
-            if not vim.api.nvim_win_is_valid(win) then
-                return
-            end
-
-            local current_buf = vim.api.nvim_win_get_buf(win)
-
-            if vim.bo[current_buf].filetype ~= "netrw" then
-                return
-            end
-
-            local pattern = "\\V" .. vim.fn.escape(netrw_line, "\\")
-
-            vim.api.nvim_win_call(win, function()
-                vim.fn.search(pattern, "W")
-            end)
+            vim.fn.search("\\V" .. vim.fn.escape(current_file, "\\"), "W")
         end)
     end,
 })
