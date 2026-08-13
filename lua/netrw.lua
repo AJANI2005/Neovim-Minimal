@@ -5,4 +5,4 @@ vim.g.netrw_browse_split = 0
 vim.g.netrw_altv = 1
 vim.g.netrw_keepdir = 1
 
-vim.keymap.set("n", "<leader>pv", "<cmd>Ex<CR")
+vim.keymap.set("n", "<leader>pv", "<cmd>Ex<CR>")
