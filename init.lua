@@ -46,6 +46,23 @@ vim.keymap.set("n", "<C-l>", "<cmd>wincmd l<CR>")
 vim.keymap.set("v", "J", ":m '>+1<CR>gv=gv", { desc = "Move selection down" })
 vim.keymap.set("v", "K", ":m '<-2<CR>gv=gv", { desc = "Move selection up" })
 
+
+-- restore cursor
+vim.api.nvim_create_autocmd("BufReadPost", {
+    callback = function()
+        if vim.bo.buftype ~= "" then
+            return
+        end
+
+        local mark = vim.api.nvim_buf_get_mark(0, '"')
+        local line_count = vim.api.nvim_buf_line_count(0)
+
+        if mark[1] > 0 and mark[1] <= line_count then
+            pcall(vim.api.nvim_win_set_cursor, 0, mark)
+        end
+    end,
+})
+
 -- import modules in lua directory
 require("lsp")	   --language server protocol
 require("find")    --fuzzy finding and live grep
