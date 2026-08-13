@@ -30,7 +30,7 @@ local function fzf(source, callback)
 	})
 
 	local command = string.format(
-		"%s | fzf --layout=reverse --border > %s",
+		"%s | fzf  --preview 'cat {}' --layout=reverse --border > %s",
 		source,
 		vim.fn.shellescape(tmp)
 	)
