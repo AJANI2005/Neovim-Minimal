@@ -33,17 +33,22 @@ vim.api.nvim_create_autocmd("WinEnter", {
             return
         end
 
-        vim.defer_fn(function()
+        vim.schedule(function()
             if not vim.api.nvim_win_is_valid(win) then
                 return
             end
 
-            vim.api.nvim_set_current_win(win)
+            local current_buf = vim.api.nvim_win_get_buf(win)
 
-            vim.fn.search(
-                "^" .. vim.fn.escape(netrw_line, [[\]]) .. "$",
-                "W"
-            )
-        end, 50)
+            if vim.bo[current_buf].filetype ~= "netrw" then
+                return
+            end
+
+            local pattern = "\\V" .. vim.fn.escape(netrw_line, "\\")
+
+            vim.api.nvim_win_call(win, function()
+                vim.fn.search(pattern, "W")
+            end)
+        end)
     end,
 })
