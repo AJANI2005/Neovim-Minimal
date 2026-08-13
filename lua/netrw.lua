@@ -7,20 +7,50 @@ vim.g.netrw_keepdir = 1
 
 vim.keymap.set("n", "<leader>pv", "<cmd>Ex<CR>")
 
-local netrw_view
+local netrw_state = {}
 
 vim.api.nvim_create_autocmd("BufWinLeave", {
-    callback = function()
-        if vim.bo.filetype == "netrw" then
-            netrw_view = vim.fn.winsaveview()
+    pattern = "*",
+    callback = function(args)
+        if vim.bo[args.buf].filetype ~= "netrw" then
+            return
         end
+
+        local win = vim.fn.bufwinid(args.buf)
+        if win == -1 then
+            return
+        end
+
+        netrw_state.dir = vim.b[args.buf].netrw_curdir
+        netrw_state.cursor = vim.api.nvim_win_get_cursor(win)
     end,
 })
 
 vim.api.nvim_create_autocmd("BufWinEnter", {
-    callback = function()
-        if vim.bo.filetype == "netrw" and netrw_view then
-            vim.fn.winrestview(netrw_view)
+    pattern = "*",
+    callback = function(args)
+        if vim.bo[args.buf].filetype ~= "netrw" then
+            return
+        end
+
+        if not netrw_state.dir then
+            return
+        end
+
+        if vim.b[args.buf].netrw_curdir ~= netrw_state.dir then
+            return
+        end
+
+        local win = vim.fn.bufwinid(args.buf)
+        if win == -1 then
+            return
+        end
+
+        local line_count = vim.api.nvim_buf_line_count(args.buf)
+        local line = netrw_state.cursor[1]
+
+        if line >= 1 and line <= line_count then
+            vim.api.nvim_win_set_cursor(win, netrw_state.cursor)
         end
     end,
 })
