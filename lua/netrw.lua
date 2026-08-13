@@ -19,23 +19,18 @@ vim.api.nvim_create_autocmd("BufWinLeave", {
             return
         end
 
-        log("BufWinLeave triggered")
-
         local win = vim.fn.bufwinid(args.buf)
 
         if win == -1 then
-            log("No window found for buffer " .. args.buf)
+            log("No window found while saving")
             return
         end
 
-        local dir = vim.b[args.buf].netrw_curdir
-        local cursor = vim.api.nvim_win_get_cursor(win)
+        netrw_state.dir = vim.b[args.buf].netrw_curdir
+        netrw_state.cursor = vim.api.nvim_win_get_cursor(win)
 
-        log("Saving dir: " .. tostring(dir))
-        log("Saving cursor: " .. vim.inspect(cursor))
-
-        netrw_state.dir = dir
-        netrw_state.cursor = cursor
+        log("Saved dir: " .. tostring(netrw_state.dir))
+        log("Saved cursor: " .. vim.inspect(netrw_state.cursor))
     end,
 })
 
@@ -45,43 +40,46 @@ vim.api.nvim_create_autocmd("BufWinEnter", {
             return
         end
 
-        log("BufWinEnter triggered")
+        vim.schedule(function()
+            if not vim.api.nvim_buf_is_valid(args.buf) then
+                return
+            end
 
-        local dir = vim.b[args.buf].netrw_curdir
+            local win = vim.fn.bufwinid(args.buf)
 
-        log("Current dir: " .. tostring(dir))
-        log("Saved dir: " .. tostring(netrw_state.dir))
+            if win == -1 then
+                log("No window found while restoring")
+                return
+            end
 
-        if not netrw_state.dir then
-            log("Nothing saved")
-            return
-        end
+            local dir = vim.b[args.buf].netrw_curdir
 
-        if dir ~= netrw_state.dir then
-            log("Directory mismatch")
-            return
-        end
+            log("Entered dir: " .. tostring(dir))
+            log("Saved dir: " .. tostring(netrw_state.dir))
 
-        local win = vim.fn.bufwinid(args.buf)
+            if dir ~= netrw_state.dir then
+                log("Directory mismatch")
+                return
+            end
 
-        if win == -1 then
-            log("No window found")
-            return
-        end
+            local line_count = vim.api.nvim_buf_line_count(args.buf)
+            local cursor = netrw_state.cursor
 
-        local line_count = vim.api.nvim_buf_line_count(args.buf)
-        local line = netrw_state.cursor[1]
+            if not cursor then
+                log("No saved cursor")
+                return
+            end
 
-        log("Saved cursor: " .. vim.inspect(netrw_state.cursor))
-        log("Line count: " .. line_count)
+            if cursor[1] < 1 or cursor[1] > line_count then
+                log("Cursor is out of range")
+                return
+            end
 
-        if line < 1 or line > line_count then
-            log("Saved cursor is outside buffer")
-            return
-        end
+            log("Restoring cursor: " .. vim.inspect(cursor))
 
-        vim.api.nvim_win_set_cursor(win, netrw_state.cursor)
+            vim.api.nvim_win_set_cursor(win, cursor)
 
-        log("Cursor restored")
+            log("Cursor restored")
+        end)
     end,
 })
