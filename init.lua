@@ -1,5 +1,4 @@
 -- options
-vim.cmd("colorscheme default")
 vim.g.mapleader = " "
 vim.g.maplocalleader = "\\"
 vim.opt.number = true
@@ -64,9 +63,11 @@ vim.api.nvim_create_autocmd("BufReadPost", {
     end,
 })
 
+
 -- import modules in lua directory
 require("lsp")	   --language server protocol
+require("colorscheme")  --custom theme
 require("find")    --fuzzy finding and live grep
 require("term")    --integrated terminal
 require("vscode")  --integration with vscode
-require("netrw")
+require("netrw")   --netrw improvements
