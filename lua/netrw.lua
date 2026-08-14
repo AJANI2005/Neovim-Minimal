@@ -26,6 +26,7 @@ vim.api.nvim_create_autocmd('FileType', {
               netrw_line >= 1 and netrw_line <= vim.api.nvim_buf_line_count(args.buf)
           then
             vim.api.nvim_win_set_cursor(0, { netrw_line, 0 })
+            netrw_line=nil
           end
         end
       end
