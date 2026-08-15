@@ -1,0 +1,8 @@
+{
+  "plugins": {
+    "neocodeium": {
+      "rev": "ab8a3da3a66d299ad5422b76ce5ee21b68719296",
+      "src": "https://github.com/monkoose/neocodeium"
+    }
+  }
+}
