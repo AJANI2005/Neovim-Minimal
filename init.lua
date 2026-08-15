@@ -47,22 +47,30 @@ vim.keymap.set("v", "J", ":m '>+1<CR>gv=gv", { desc = "Move selection down" })
 vim.keymap.set("v", "K", ":m '<-2<CR>gv=gv", { desc = "Move selection up" })
 
 
--- restore cursor
-vim.api.nvim_create_autocmd("BufReadPost", {
-    callback = function()
-        if vim.bo.buftype ~= "" then
-            return
-        end
-
-        local mark = vim.api.nvim_buf_get_mark(0, '"')
-        local line_count = vim.api.nvim_buf_line_count(0)
-
-        if mark[1] > 0 and mark[1] <= line_count then
-            pcall(vim.api.nvim_win_set_cursor, 0, mark)
-        end
-    end,
+-- Highlight selection on yank
+vim.api.nvim_create_autocmd("TextYankPost", {
+	group = vim.api.nvim_create_augroup("highlight_yank", { clear = true }),
+	pattern = "*",
+	desc = "highlight selection on yank",
+	callback = function()
+		vim.highlight.on_yank({ timeout = 200, visual = true })
+	end,
 })
 
+-- Restore cursor to file position in previous editing session
+vim.api.nvim_create_autocmd("BufReadPost", {
+	callback = function(args)
+		local mark = vim.api.nvim_buf_get_mark(args.buf, '"')
+		local line_count = vim.api.nvim_buf_line_count(args.buf)
+		if mark[1] > 0 and mark[1] <= line_count then
+			vim.api.nvim_win_set_cursor(0, mark)
+			-- defer centering slightly so it's applied after render
+			vim.schedule(function()
+				vim.cmd("normal! zz")
+			end)
+		end
+	end,
+})
 
 -- import modules in lua directory
 require("lsp")	   --language server protocol
@@ -71,3 +79,4 @@ require("find")    --fuzzy finding and live grep
 require("term")    --integrated terminal
 require("vscode")  --integration with vscode
 require("netrw")   --netrw improvements
+require("statusline")
