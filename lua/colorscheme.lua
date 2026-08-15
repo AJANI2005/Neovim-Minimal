@@ -2,24 +2,24 @@ vim.o.termguicolors = true
 vim.g.colors_name = "custom"
 
 local c = {
-	bg         = "#1e1e1e",
-	bg_dark    = "#181818",
-	bg_light   = "#252526",
-	fg         = "#d4d4d4",
-	fg_dim     = "#808080",
+	bg         = "#1a1b26",
+	bg_dark    = "#16161e",
+	bg_light   = "#24283b",
+	fg         = "#c0caf5",
+	fg_dim     = "#565f89",
 
-	red        = "#f44747",
-	orange     = "#ce9178",
-	yellow     = "#dcdcaa",
-	green      = "#6a9955",
-	cyan       = "#4ec9b0",
-	blue       = "#569cd6",
-	blue_light = "#9cdcfe",
-	purple     = "#c586c0",
+	red        = "#f7768e",
+	orange     = "#ff9e64",
+	yellow     = "#e0af68",
+	green      = "#9ece6a",
+	cyan       = "#7dcfff",
+	blue       = "#7aa2f7",
+	blue_light = "#7dcfff",
+	purple     = "#bb9af7",
 
-	border     = "#3e3e42",
-	selection  = "#264f78",
-	cursor     = "#aeafad",
+	border     = "#3b4261",
+	selection  = "#33467c",
+	cursor     = "#c0caf5",
 }
 
 local highlights = {
@@ -62,7 +62,7 @@ local highlights = {
 	Boolean = { fg = c.blue_light },
 
 	Identifier = { fg = c.blue_light },
-	Function = { fg = c.yellow },
+	Function = { fg = c.blue },
 
 	Statement = { fg = c.purple },
 	Conditional = { fg = c.purple },
@@ -99,7 +99,7 @@ local highlights = {
 	Folded = { fg = c.fg_dim, bg = c.bg_light },
 	FoldColumn = { fg = c.fg_dim, bg = c.bg },
 
-	Title = { fg = c.blue_light, bold = true },
+	Title = { fg = c.blue, bold = true },
 }
 
 for group, opts in pairs(highlights) do
