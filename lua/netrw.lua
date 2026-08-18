@@ -26,10 +26,15 @@ vim.api.nvim_create_autocmd('FileType', {
               netrw_line >= 1 and netrw_line <= vim.api.nvim_buf_line_count(args.buf)
           then
             vim.api.nvim_win_set_cursor(0, { netrw_line, 0 })
-            netrw_line=nil
+            netrw_line = nil
           end
         end
       end
     )
+    local opts = { buffer = args.buf, silent = true }
+    vim.keymap.set("n", "<C-h>", "<C-w>h", opts)
+    vim.keymap.set("n", "<C-j>", "<C-w>j", opts)
+    vim.keymap.set("n", "<C-k>", "<C-w>k", opts)
+    vim.keymap.set("n", "<C-l>", "<C-w>l", opts)
   end
 })
