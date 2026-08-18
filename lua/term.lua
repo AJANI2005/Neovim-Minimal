@@ -41,11 +41,11 @@ local function float_term()
 	vim.cmd("startinsert")
 end
 
-vim.keymap.set("n", "<leader>t", new_term, {
+vim.keymap.set({"n","t"}, "<A-Enter>", new_term, {
 	desc = "New Terminal",
 })
 
-vim.keymap.set("n", "<leader>o", float_term, {
+vim.keymap.set({"n","t"}, "<A-S-Enter>", float_term, {
 	desc = "Floating Terminal",
 })
 
@@ -58,8 +58,8 @@ vim.api.nvim_create_autocmd("TermOpen", {
 		vim.keymap.set("t", "<C-k>", "<C-\\><C-n><C-w>ki", opts)
 		vim.keymap.set("t", "<C-j>", "<C-\\><C-n><C-w>ji", opts)
 
-		vim.keymap.set("t", "<Esc>", "<C-\\><C-n>", {
-			desc = "Exit terminal mode",
+		vim.keymap.set("t", "<A-Esc>", "<C-\\><C-n><cmd>close<cr>", {
+			desc = "Close terminal",
 			buffer = args.buf,
 		})
 	end,
