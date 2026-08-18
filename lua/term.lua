@@ -49,6 +49,9 @@ vim.keymap.set({"n","t"}, "<A-S-Enter>", float_term, {
 	desc = "Floating Terminal",
 })
 
+-- Shell Auto
+vim.keymap.set("n", "<leader>lg", function() float_term(); vim.cmd("term lazygit") end)
+
 vim.api.nvim_create_autocmd("TermOpen", {
 	callback = function(args)
 		local opts = { buffer = args.buf }
@@ -64,3 +67,4 @@ vim.api.nvim_create_autocmd("TermOpen", {
 		})
 	end,
 })
+
