@@ -17,18 +17,20 @@ vim.opt.termguicolors = true
 vim.opt.wildmenu = true
 vim.opt.wildmode = "longest:full,full"
 vim.opt.undofile = true
-
-
+vim.opt.undodir = os.getenv("HOME") .. "/.vim/undodir"
+vim.opt.hlsearch = false
+vim.opt.incsearch = true
 vim.o.complete = ".,o"
 vim.o.completeopt = "menu,menuone,noselect,popup"
 vim.bo.omnifunc = "v:lua.vim.lsp.omnifunc"
 vim.o.autocomplete = true
 vim.o.pumheight = 12
+vim.opt.isfname:append("@-@")
 
 -- diagnostics
 vim.diagnostic.config({ virtual_text = true })
 -- keymaps
-vim.keymap.set("n", "<leader>d", function()
+vim.keymap.set("n", "<leader>x", function()
   vim.diagnostic.setqflist()
   vim.lsp.buf.workspace_diagnostics()
   vim.cmd("copen")
@@ -44,9 +46,23 @@ vim.keymap.set("n", "<C-k>", "<cmd>wincmd k<CR>")
 vim.keymap.set("n", "<C-l>", "<cmd>wincmd l<CR>")
 vim.keymap.set("v", "J", ":m '>+1<CR>gv=gv", { desc = "Move selection down" })
 vim.keymap.set("v", "K", ":m '<-2<CR>gv=gv", { desc = "Move selection up" })
+vim.keymap.set("n", "J", "mzJ`z", { desc = "Join line" })
+vim.keymap.set("n", "<C-d>", "<C-d>zz")
+vim.keymap.set("n", "<C-u>", "<C-u>zz")
+vim.keymap.set("n", "n", "nzzzv")
+vim.keymap.set("n", "N", "Nzzzv") -- keep search term centered
+vim.keymap.set("x", "<leader>p", "\"_dP", { desc = "Paste without changing buffer" })
+vim.keymap.set("n","Q", "<nop>") -- worst place in the universe
+-- Substitute
+vim.keymap.set({"n"}, "<leader>sw", [[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>]])
+-- substitute selection
+vim.keymap.set({"v"}, "<leader>sw", [["hy:%s/\V<C-r>h/<C-r>h/gI<Left><Left><Left>]])
 
+-- split window
+vim.keymap.set("n", "<leader>sv", "<C-w>v<C-w>l", { desc = "Split Window Vertically" })
+vim.keymap.set("n", "<leader>sh", "<C-w>s<C-w>j", { desc = "Split Window Horizontally" })
 
--- Highlight selection on yank
+-- Highlight selection on 
 vim.api.nvim_create_autocmd("TextYankPost", {
   group = vim.api.nvim_create_augroup("highlight_yank", { clear = true }),
   pattern = "*",
