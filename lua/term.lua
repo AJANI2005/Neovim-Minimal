@@ -19,8 +19,8 @@ local function float_term()
     return
   end
 
-  local width = math.floor(vim.o.columns * 0.8)
-  local height = math.floor(vim.o.lines * 0.8)
+  local width = math.floor(vim.o.columns * 0.9)
+  local height = math.floor(vim.o.lines * 0.9)
 
   local buf = vim.api.nvim_create_buf(false, true)
 
