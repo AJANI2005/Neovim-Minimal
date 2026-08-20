@@ -53,14 +53,17 @@ vim.keymap.set("n", "n", "nzzzv")
 vim.keymap.set("n", "N", "Nzzzv") -- keep search term centered
 vim.keymap.set("x", "<leader>p", "\"_dP", { desc = "Paste without changing buffer" })
 vim.keymap.set("n","Q", "<nop>") -- worst place in the universe
+
 -- Substitute
 vim.keymap.set({"n"}, "<leader>sw", [[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>]])
+
 -- substitute selection
 vim.keymap.set({"v"}, "<leader>sw", [["hy:%s/\V<C-r>h/<C-r>h/gI<Left><Left><Left>]])
 
--- split window
+-- split window 
 vim.keymap.set("n", "<leader>sv", "<C-w>v<C-w>l", { desc = "Split Window Vertically" })
 vim.keymap.set("n", "<leader>sh", "<C-w>s<C-w>j", { desc = "Split Window Horizontally" })
+
 
 -- Highlight selection on 
 vim.api.nvim_create_autocmd("TextYankPost", {
@@ -95,3 +98,5 @@ require("vscode")      --integration with vscode
 require("netrw")       --netrw improvements
 require("statusline")  --custom statusline
 require("plugins")     --experimental plugins
+
+
